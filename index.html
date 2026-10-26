@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PAWLLY - Adopción Responsable y Transiciones HTML5</title>
+  <title>PAWLLY - Estructura Web, Accesibilidad y Canvas Animado</title>
   <style>
     :root {
       --mint-bg: #e2f4f0;
@@ -32,18 +32,15 @@
     body {
       background-color: var(--mint-bg);
       color: var(--text-dark);
-      line-height: 1.4;
-      transition-property: background-color;
-      transition-duration: 2.5s;
-      transition-timing-function: ease-in-out;
-      transition-delay: 0.2s;
-      will-change: background-color;
+      line-height: 1.5;
+      transition: background-color 2.5s ease-in-out 0.2s;
     }
 
     body.loaded {
       background-color: #f3faf8;
     }
 
+    /* ENCABEZADO Y NAVEGACIÓN PRINCIPAL */
     .main-header {
       background-color: var(--white);
       padding: 15px 40px;
@@ -73,10 +70,7 @@
       height: 48px;
       width: auto;
       cursor: pointer;
-      transition-property: transform;
-      transition-duration: 0.4s;
-      transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
-      will-change: transform;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     .brand-logo-img:hover {
@@ -91,6 +85,7 @@
       font-size: 0.85rem;
     }
 
+    /* MENÚ DE NAVEGACIÓN PRINCIPAL Y DESPLEGABLE */
     .main-nav ul {
       display: flex;
       list-style: none;
@@ -98,17 +93,54 @@
       align-items: center;
     }
 
+    .main-nav li {
+      position: relative;
+    }
+
     .main-nav a {
       color: #555;
       font-weight: 600;
       font-size: 1rem;
       text-decoration: none;
-      transition: color 0.2s ease;
+      padding: 8px 4px;
+      transition: color 0.2s ease, border-bottom 0.2s ease;
     }
 
-    .main-nav a:hover, .main-nav a.active {
-      color: #111;
-      font-weight: 700;
+    .main-nav a:hover, .main-nav a:focus, .main-nav a.active {
+      color: var(--mint-dark);
+    }
+
+    /* Submenú desplegable (Dropdown) */
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background-color: var(--white);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      border-radius: 12px;
+      list-style: none;
+      padding: 10px 0;
+      min-width: 160px;
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .main-nav li:hover .dropdown-menu,
+    .main-nav li:focus-within .dropdown-menu {
+      display: flex;
+    }
+
+    .dropdown-menu li a {
+      padding: 8px 16px;
+      font-size: 0.9rem;
+      color: #555;
+      display: block;
+    }
+
+    .dropdown-menu li a:hover {
+      background-color: #f0f7f5;
+      color: var(--mint-dark);
     }
 
     .user-avatar {
@@ -123,10 +155,64 @@
       font-size: 0.9rem;
     }
 
-    .container {
-      max-width: 1150px;
+    /* CONTENEDOR PRINCIPAL CON DISEÑO DE DOS COLUMNAS (ASIDE + CONTENT) */
+    .layout-container {
+      max-width: 1200px;
       margin: 30px auto;
       padding: 0 20px;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 30px;
+      align-items: start;
+    }
+
+    /* BARRA LATERAL (ASIDE) - NAVEGACIÓN SECUNDARIA */
+    .sidebar {
+      background-color: var(--white);
+      border-radius: 25px;
+      padding: 25px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+      position: sticky;
+      top: 90px;
+    }
+
+    .sidebar h3 {
+      font-size: 1.1rem;
+      color: var(--mint-dark);
+      margin-bottom: 15px;
+      border-bottom: 2px solid var(--mint-card);
+      padding-bottom: 8px;
+    }
+
+    .sidebar-nav {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .sidebar-nav a {
+      text-decoration: none;
+      color: #555;
+      font-size: 0.95rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.2s, transform 0.2s;
+    }
+
+    .sidebar-nav a:hover, .sidebar-nav a:focus {
+      color: var(--pink-dark);
+      transform: translateX(4px);
+      outline: none;
+    }
+
+    /* CONTENIDO PRINCIPAL */
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      gap: 35px;
     }
 
     .btn-pink {
@@ -141,27 +227,24 @@
       display: inline-block;
       text-decoration: none;
       text-align: center;
-      transition-property: background-color, transform, box-shadow;
-      transition-duration: 0.3s;
-      transition-timing-function: ease;
-      will-change: transform, background-color;
+      transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
     }
 
-    .btn-pink:hover {
+    .btn-pink:hover, .btn-pink:focus {
       background-color: var(--pink-dark);
-      transform: scale(1.06);
+      transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(238, 139, 179, 0.35);
+      outline: none;
     }
 
     .btn-pink:active {
-      transform: scale(0.94);
+      transform: scale(0.96);
     }
 
     .hero-section {
       background-color: var(--mint-card);
       border-radius: 35px;
       padding: 35px;
-      margin-bottom: 40px;
     }
 
     .hero-title {
@@ -207,10 +290,7 @@
 
     .interactive-pet-img {
       cursor: pointer;
-      transition-property: transform;
-      transition-duration: 0.5s;
-      transition-timing-function: cubic-bezier(0.25, 1, 0.5, 1);
-      will-change: transform;
+      transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
     }
 
     .interactive-pet-img.shifted {
@@ -223,10 +303,7 @@
       padding: 30px;
       text-align: center;
       opacity: 1;
-      transition-property: opacity;
-      transition-duration: 0.5s;
-      transition-timing-function: ease-in-out;
-      will-change: opacity;
+      transition: opacity 0.5s ease-in-out;
       cursor: pointer;
       user-select: none;
     }
@@ -244,7 +321,6 @@
       background-color: var(--pink-light);
       border-radius: 35px;
       padding: 35px;
-      margin-bottom: 40px;
     }
 
     .section-title {
@@ -274,8 +350,9 @@
       transition: all 0.3s ease;
     }
 
-    .pill-btn:hover {
+    .pill-btn:hover, .pill-btn:focus {
       background-color: #f7e6ee;
+      outline: none;
     }
 
     .pill-btn.active {
@@ -287,7 +364,7 @@
 
     .pet-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 20px;
     }
 
@@ -299,7 +376,6 @@
       gap: 15px;
       align-items: center;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-      transition: transform 0.3s ease, opacity 0.3s ease;
     }
 
     .pet-card.hidden {
@@ -337,7 +413,6 @@
       grid-template-columns: 1fr 1fr;
       gap: 25px;
       align-items: start;
-      margin-bottom: 40px;
     }
 
     .panel-card {
@@ -472,9 +547,7 @@
       align-items: center;
       gap: 14px;
       opacity: 1;
-      transition-property: opacity, transform;
-      transition-duration: 0.4s;
-      transition-timing-function: ease-in-out;
+      transition: opacity 0.4s ease-in-out;
       cursor: pointer;
     }
 
@@ -523,16 +596,42 @@
       transition: all 0.3s ease;
     }
 
-    .btn-ai:hover {
+    .btn-ai:hover, .btn-ai:focus {
       background-color: #f7fdfc;
       transform: translateY(-2px);
+      outline: none;
+    }
+
+    /* ESTILOS DEL CANVAS INTEGRADO */
+    .canvas-section {
+      background-color: var(--white);
+      border-radius: 35px;
+      padding: 35px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+    }
+
+    .canvas-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      margin-top: 15px;
+    }
+
+    #miCanvas {
+      background: #f7fdfc;
+      border: 3px solid var(--mint-card);
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(59, 122, 110, 0.15);
+      max-width: 100%;
+      height: auto;
     }
 
     .media-form-section {
       background-color: var(--white);
       border-radius: 35px;
       padding: 35px;
-      margin-bottom: 40px;
     }
 
     .media-form-grid {
@@ -577,7 +676,6 @@
       border: 1px solid #ddd;
       outline: none;
       transition: border-color 0.3s, box-shadow 0.3s;
-      will-change: border-color, box-shadow;
     }
 
     .form-control:focus {
@@ -589,7 +687,6 @@
       border-color: var(--error-red);
       background-color: #ffebee;
       animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
-      will-change: transform;
     }
 
     @keyframes shake {
@@ -602,7 +699,6 @@
     .btn-pink.submitting {
       animation: submitAnim 0.8s forwards ease-in-out;
       pointer-events: none;
-      will-change: transform, opacity, background-color;
     }
 
     @keyframes submitAnim {
@@ -623,16 +719,48 @@
       }
     }
 
+    /* PIE DE PÁGINA (FOOTER) CON ENLACES DE INTERÉS */
     .main-footer {
       background-color: var(--white);
       text-align: center;
-      padding: 20px;
-      border-radius: 20px 20px 0 0;
+      padding: 30px 20px;
+      margin-top: 40px;
+      border-radius: 30px 30px 0 0;
       color: #666;
       font-size: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
 
-    @media (max-width: 850px) {
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+      list-style: none;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      color: var(--mint-dark);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover, .footer-links a:focus {
+      color: var(--pink-dark);
+      text-decoration: underline;
+      outline: none;
+    }
+
+    @media (max-width: 900px) {
+      .layout-container {
+        grid-template-columns: 1fr;
+      }
+      .sidebar {
+        position: static;
+      }
       .hero-grid, .adoption-dashboard-grid, .media-form-grid {
         grid-template-columns: 1fr;
       }
@@ -642,290 +770,344 @@
 <body>
 
   <!-- ENCABEZADO -->
-  <header class="main-header">
+  <header class="main-header" role="banner">
     <div class="header-container">
       <div class="brand-group">
-        <a href="#inicio">
-          <img src="Img/pawlly.png" alt="PAWLLY" class="brand-logo-img" title="Pasa el ratón para rotar el logo">
+        <a href="#inicio" aria-label="Ir a la página principal de PAWLLY">
+          <img src="Img/pawlly.png" alt="Logotipo oficial de PAWLLY" class="brand-logo-img" onerror="this.src='https://placehold.co/120x48/e2f4f0/3b7a6e?text=PAWLLY'">
         </a>
         <div class="location-tag">
           📍 Mérida Yuc. Cp.97145
         </div>
       </div>
 
-      <nav class="main-nav">
+      <!-- NAVEGACIÓN PRINCIPAL -->
+      <nav class="main-nav" aria-label="Navegación principal">
         <ul>
           <li><a href="#inicio">Inicio</a></li>
-          <li><a href="#adopcion">Adopción</a></li>
+          <li>
+            <a href="#adopcion" aria-haspopup="true" aria-expanded="false">Adopción ▾</a>
+            <ul class="dropdown-menu" aria-label="Submenú de adopción">
+              <li><a href="#adopcion">Catálogo general</a></li>
+              <li><a href="#mi-adopcion">Estado de solicitud</a></li>
+              <li><a href="#animacion-canvas">Juego / Canvas</a></li>
+            </ul>
+          </li>
           <li><a href="#mi-adopcion" class="active">Mí adopción</a></li>
+          <li><a href="#animacion-canvas">Canvas</a></li>
           <li><a href="#solicitud">Solicitud</a></li>
         </ul>
       </nav>
 
-      <div class="user-avatar">
+      <div class="user-avatar" aria-label="Perfil de usuario">
         👤
       </div>
     </div>
   </header>
 
-  <main class="container">
+  <!-- CONTENEDOR GENERAL CON ESTRUCTURA GRID (SIDEBAR + MAIN) -->
+  <div class="layout-container">
 
-    <!-- SECCIÓN INICIO -->
-    <section id="inicio" class="hero-section">
-      <h1 class="hero-title">Adopción responsable, acompañamiento responsable.</h1>
-      
-      <div class="hero-grid">
-        <div class="carousel-card">
-          <span class="badge-afad">AFAD</span>
-          <img src="Img/Boris.jpeg" alt="Boris" class="carousel-card-img interactive-pet-img" id="borisImg" title="Haz clic sobre Boris para mover la imagen">
-          <h3 style="margin-top: 15px; font-size: 1.2rem;">Boris</h3>
-          <p style="font-size: 0.82rem; color: #666; margin-bottom: 15px;">Gatito macho de 8 meses. Haz clic sobre la foto para desplazarla en X/Y.</p>
-          <button class="btn-pink">Conóceme</button>
-        </div>
+    <!-- BARRA LATERAL (ASIDE) - NAVEGACIÓN SECUNDARIA -->
+    <aside class="sidebar" aria-label="Navegación secundaria y enlaces complementarios">
+      <h3>Navegación rápida</h3>
+      <ul class="sidebar-nav">
+        <li><a href="#inicio">🏠 Panel Principal</a></li>
+        <li><a href="#adopcion">🐾 Buscar Compañero</a></li>
+        <li><a href="#mi-adopcion">📋 Seguimiento (Juno)</a></li>
+        <li><a href="#animacion-canvas">🎨 Canvas Animado</a></li>
+        <li><a href="#solicitud">📝 Formulario de Solicitud</a></li>
+      </ul>
 
-        <div class="about-card" id="aboutCard" title="Haz clic en este cuadro para cambiar la opacidad">
-          <h2>¿Quiénes somos?</h2>
-          <p style="font-size: 0.9rem; color: #555; line-height: 1.6;">
-            Conectamos animales que buscan un hogar con personas que tienen el amor para darles. Haz clic sobre este contenedor para alternar su opacidad de manera suave.
-          </p>
-          <div style="margin-top: 20px;">
-            <button class="btn-pink">Encuentra tu compañero</button>
-          </div>
-        </div>
-      </div>
-    </section>
+      <h3 style="margin-top: 25px;">Alianzas</h3>
+      <ul class="sidebar-nav">
+        <li><a href="https://www.facebook.com" target="_blank" rel="noopener">🐶 AFAD Mérida</a></li>
+        <li><a href="https://www.petco.com.mx" target="_blank" rel="noopener">🐱 Petco Adopciones</a></li>
+      </ul>
+    </aside>
 
-    <!-- SECCIÓN ADOPCIÓN -->
-    <section id="adopcion" class="adoption-section">
-      <h2 class="section-title">Encuentra a tu compañero</h2>
-      
-      <div class="filter-box">
-        <button class="pill-btn active" data-filter="todos">Todos</button>
-        <button class="pill-btn" data-filter="perros">Perros</button>
-        <button class="pill-btn" data-filter="gatos">Gatos</button>
-      </div>
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="main-content" role="main">
 
-      <div class="pet-grid">
-        <article class="pet-card" data-category="gatos">
-          <img src="Img/Juno.jpeg" alt="Juno" class="pet-card-img">
-          <div>
-            <h3>Juno</h3>
-            <p style="font-size: 0.75rem; color: #666;">Gatito macho de 10 meses, rescatado de la calle.</p>
-            <span class="tag">Vacunado</span>
-            <a href="#solicitud" class="btn-pink" style="padding: 4px 10px; font-size: 0.7rem; display: block; margin-top: 8px;">
-              Levanta una solicitud
-            </a>
-          </div>
-        </article>
-
-        <article class="pet-card" data-category="gatos">
-          <img src="Img/Stone.jpeg" alt="Stone" class="pet-card-img">
-          <div>
-            <h3>Stone</h3>
-            <p style="font-size: 0.75rem; color: #666;">Gatita hembra de 11 meses, cariñosa.</p>
-            <span class="tag">Esterilizada</span>
-            <a href="#solicitud" class="btn-pink" style="padding: 4px 10px; font-size: 0.7rem; display: block; margin-top: 8px;">
-              Levanta una solicitud
-            </a>
-          </div>
-        </article>
-
-        <article class="pet-card" data-category="perros">
-          <img src="Img/Fito.jpeg" alt="Fito" class="pet-card-img">
-          <div>
-            <h3>Fito</h3>
-            <p style="font-size: 0.75rem; color: #666;">Perrito mestizo de 1 año, energético y noble.</p>
-            <span class="tag">Vacunado</span>
-            <a href="#solicitud" class="btn-pink" style="padding: 4px 10px; font-size: 0.7rem; display: block; margin-top: 8px;">
-              Levanta una solicitud
-            </a>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <!-- SECCIÓN MI ADOPCIÓN -->
-    <section id="mi-adopcion">
-      <h2 class="dashboard-title">Seguimiento de Adopción</h2>
-
-      <div class="adoption-dashboard-grid">
+      <!-- SECCIÓN INICIO -->
+      <section id="inicio" class="hero-section">
+        <h1 class="hero-title">Adopción responsable, acompañamiento responsable.</h1>
         
-        <div class="panel-card">
-          <h3 class="folio-title">Ingresa tú folio de adopción</h3>
-          
-          <div class="folio-search-box">
-            <input type="text" value="PW-2025-042" class="folio-input" readonly>
-            <button class="btn-pink">Buscar</button>
+        <div class="hero-grid">
+          <div class="carousel-card">
+            <span class="badge-afad">AFAD</span>
+            <img src="Img/Boris.jpeg" alt="Fotografía de Boris, gatito en adopción" class="carousel-card-img interactive-pet-img" id="borisImg" tabindex="0" onerror="this.src='https://placehold.co/300x240/d1efe7/3b7a6e?text=Boris'">
+            <h3 style="margin-top: 15px; font-size: 1.2rem;">Boris</h3>
+            <p style="font-size: 0.82rem; color: #666; margin-bottom: 15px;">Gatito macho de 8 meses. Haz clic sobre la foto para desplazarla.</p>
+            <button class="btn-pink">Conóceme</button>
           </div>
 
-          <div class="pet-header-info">
-            <h2>Gato: Juno</h2>
-            <span class="date">23/11/2026</span>
-          </div>
-
-          <div class="timeline">
-            <div class="timeline-item">
-              <div class="timeline-icon">✓</div>
-              <div class="timeline-content">
-                <h4>Solicitud recibida</h4>
-                <p>Recibimos tu solicitud, la asociación la revisará en 24–48 h.</p>
-              </div>
-            </div>
-
-            <div class="timeline-item">
-              <div class="timeline-icon">✓</div>
-              <div class="timeline-content">
-                <h4>En revisión</h4>
-                <p>Validando tu perfil y compatibilidad con la mascota.</p>
-              </div>
-            </div>
-
-            <div class="timeline-item">
-              <div class="timeline-icon">✓</div>
-              <div class="timeline-content">
-                <h4>Entrevista</h4>
-                <p>AFAD Mérida te contactará para conocerte mejor.</p>
-              </div>
-            </div>
-
-            <div class="timeline-item">
-              <div class="timeline-icon">✓</div>
-              <div class="timeline-content">
-                <h4>Visita al hogar</h4>
-                <p>Se programa una videollamada para facilitar la visita al hogar.</p>
-              </div>
-            </div>
-
-            <div class="timeline-item">
-              <div class="timeline-icon"></div>
-              <div class="timeline-content">
-                <h4>¡Aprobada!</h4>
-                <p>Firma del contrato de adopción responsable y entrega.</p>
-              </div>
+          <div class="about-card" id="aboutCard" tabindex="0" aria-label="Información sobre quiénes somos">
+            <h2>¿Quiénes somos?</h2>
+            <p style="font-size: 0.9rem; color: #555; line-height: 1.6;">
+              Conectamos animales que buscan un hogar con personas que tienen el amor para darles. Haz clic sobre este contenedor para alternar su opacidad de manera suave.
+            </p>
+            <div style="margin-top: 20px;">
+              <button class="btn-pink">Encuentra tu compañero</button>
             </div>
           </div>
         </div>
+      </section>
 
-        <div class="panel-card">
-          <h2 class="goals-title">Metas con mí mascota</h2>
-          <p class="goals-subtitle">Marca las metas alcanzadas y construyan juntos su nueva vida.</p>
-
-          <div class="goals-list">
-            <div class="goal-card" title="Haz clic para alternar la opacidad">
-              <input type="checkbox" class="goal-checkbox">
-              <span class="goal-icon">🏠</span>
-              <div class="goal-text">
-                <h5>Primeros 30 días en casa</h5>
-                <p>Superada la etapa de adaptación inicial.</p>
-              </div>
-            </div>
-
-            <div class="goal-card" title="Haz clic para alternar la opacidad">
-              <input type="checkbox" class="goal-checkbox">
-              <span class="goal-icon">🩺</span>
-              <div class="goal-text">
-                <h5>Visita inicial al veterinario</h5>
-                <p>Chequeo general y expediente creado.</p>
-              </div>
-            </div>
-
-            <div class="goal-card" title="Haz clic para alternar la opacidad">
-              <input type="checkbox" class="goal-checkbox">
-              <span class="goal-icon">💉</span>
-              <div class="goal-text">
-                <h5>Vacunas al día</h5>
-                <p>Esquema de vacunación completo.</p>
-              </div>
-            </div>
-
-            <div class="goal-card" title="Haz clic para alternar la opacidad">
-              <input type="checkbox" class="goal-checkbox">
-              <span class="goal-icon">🧼</span>
-              <div class="goal-text">
-                <h5>Cuidados e higiene</h5>
-                <p>Baño, desparasitación y grooming.</p>
-              </div>
-            </div>
-
-            <div class="goal-card" title="Haz clic para alternar la opacidad">
-              <input type="checkbox" class="goal-checkbox">
-              <span class="goal-icon">🐾</span>
-              <div class="goal-text">
-                <h5>Adaptación completa</h5>
-                <p>Tu compañero ya se siente en casa.</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="ai-btn-wrapper">
-            <button class="btn-ai">
-              🤖 Pedir orientación a la IA
-            </button>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <div style="background: white; border-radius: 28px; padding: 25px; text-align: center; margin-bottom: 40px;">
-      <h3 style="color: var(--mint-dark); margin-bottom: 10px;">Expediente activo: Juno</h3>
-      <p style="font-size: 0.85rem; color: #666; margin-bottom: 15px;">Haz clic sobre la imagen para desplazarla en los ejes X / Y.</p>
-      <img src="Img/Juno.jpeg" alt="Juno" class="interactive-pet-img" id="junoImg" style="border-radius: 16px;" title="Haz clic para mover la foto">
-    </div>
-
-    <!-- SECCIÓN SOLICITUD -->
-    <section id="solicitud" class="media-form-section">
-      <div class="media-form-grid">
+      <!-- SECCIÓN ADOPCIÓN -->
+      <section id="adopcion" class="adoption-section">
+        <h2 class="section-title">Encuentra a tu compañero</h2>
         
-        <div style="text-align: center;">
-          <h2 style="color: #555; font-size: 1.4rem; margin-bottom: 15px;">Conoce nuestros albergues:</h2>
-          <div class="reel-wrapper">
-            <iframe 
-              src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1376267787392352&show_text=false&width=320" 
-              scrolling="no" 
-              frameborder="0" 
-              allowfullscreen="true" 
-              allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share">
-            </iframe>
-          </div>
+        <div class="filter-box" role="region" aria-label="Filtros de búsqueda de mascotas">
+          <button class="pill-btn active" data-filter="todos">Todos</button>
+          <button class="pill-btn" data-filter="perros">Perros</button>
+          <button class="pill-btn" data-filter="gatos">Gatos</button>
         </div>
 
-        <div>
-          <h2 style="color: #555; font-size: 1.4rem; margin-bottom: 15px;">Enviar solicitud / consulta</h2>
+        <div class="pet-grid">
+          <article class="pet-card" data-category="gatos">
+            <img src="Img/Juno.jpeg" alt="Fotografía de Juno" class="pet-card-img" onerror="this.src='https://placehold.co/90x90/e2f4f0/3b7a6e?text=Juno'">
+            <div>
+              <h3>Juno</h3>
+              <p style="font-size: 0.75rem; color: #666;">Gatito macho de 10 meses, rescatado de la calle.</p>
+              <span class="tag">Vacunado</span>
+              <a href="#solicitud" class="btn-pink" style="padding: 4px 10px; font-size: 0.7rem; display: block; margin-top: 8px;">
+                Levanta una solicitud
+              </a>
+            </div>
+          </article>
+
+          <article class="pet-card" data-category="gatos">
+            <img src="Img/Stone.jpeg" alt="Fotografía de Stone" class="pet-card-img" onerror="this.src='https://placehold.co/90x90/e2f4f0/3b7a6e?text=Stone'">
+            <div>
+              <h3>Stone</h3>
+              <p style="font-size: 0.75rem; color: #666;">Gatita hembra de 11 meses, cariñosa.</p>
+              <span class="tag">Esterilizada</span>
+              <a href="#solicitud" class="btn-pink" style="padding: 4px 10px; font-size: 0.7rem; display: block; margin-top: 8px;">
+                Levanta una solicitud
+              </a>
+            </div>
+          </article>
+
+          <article class="pet-card" data-category="perros">
+            <img src="Img/Fito.jpeg" alt="Fotografía de Fito" class="pet-card-img" onerror="this.src='https://placehold.co/90x90/e2f4f0/3b7a6e?text=Fito'">
+            <div>
+              <h3>Fito</h3>
+              <p style="font-size: 0.75rem; color: #666;">Perrito mestizo de 1 año, energético y noble.</p>
+              <span class="tag">Vacunado</span>
+              <a href="#solicitud" class="btn-pink" style="padding: 4px 10px; font-size: 0.7rem; display: block; margin-top: 8px;">
+                Levanta una solicitud
+              </a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- SECCIÓN MI ADOPCIÓN -->
+      <section id="mi-adopcion">
+        <h2 class="dashboard-title">Seguimiento de Adopción</h2>
+
+        <div class="adoption-dashboard-grid">
           
-          <form id="adoptionForm" action="https://formsubmit.co/TU_CORREO@gmail.com" method="POST" novalidate>
-            <input type="hidden" name="_subject" value="Nueva consulta de adopción Pawlly">
-            <input type="hidden" name="_template" value="table">
-            <input type="hidden" name="_captcha" value="false">
-
-            <div class="form-group">
-              <label for="nombre">Nombre completo *</label>
-              <input type="text" id="nombre" name="nombre" class="form-control" required>
+          <div class="panel-card">
+            <h3 class="folio-title">Ingresa tú folio de adopción</h3>
+            
+            <div class="folio-search-box">
+              <input type="text" value="PW-2025-042" class="folio-input" readonly aria-label="Folio de adopción activo">
+              <button class="btn-pink">Buscar</button>
             </div>
 
-            <div class="form-group">
-              <label for="email">Correo electrónico *</label>
-              <input type="email" id="email" name="email" class="form-control" required>
+            <div class="pet-header-info">
+              <h2>Gato: Juno</h2>
+              <span class="date">23/11/2026</span>
             </div>
 
-            <div class="form-group">
-              <label for="mensaje">Mensaje o comentarios *</label>
-              <textarea id="mensaje" name="mensaje" class="form-control" rows="3" required></textarea>
+            <div class="timeline">
+              <div class="timeline-item">
+                <div class="timeline-icon">✓</div>
+                <div class="timeline-content">
+                  <h4>Solicitud recibida</h4>
+                  <p>Recibimos tu solicitud, la asociación la revisará en 24–48 h.</p>
+                </div>
+              </div>
+
+              <div class="timeline-item">
+                <div class="timeline-icon">✓</div>
+                <div class="timeline-content">
+                  <h4>En revisión</h4>
+                  <p>Validando tu perfil y compatibilidad con la mascota.</p>
+                </div>
+              </div>
+
+              <div class="timeline-item">
+                <div class="timeline-icon">✓</div>
+                <div class="timeline-content">
+                  <h4>Entrevista</h4>
+                  <p>AFAD Mérida te contactará para conocerte mejor.</p>
+                </div>
+              </div>
+
+              <div class="timeline-item">
+                <div class="timeline-icon">✓</div>
+                <div class="timeline-content">
+                  <h4>Visita al hogar</h4>
+                  <p>Se programa una videollamada para facilitar la visita al hogar.</p>
+                </div>
+              </div>
+
+              <div class="timeline-item">
+                <div class="timeline-icon"></div>
+                <div class="timeline-content">
+                  <h4>¡Aprobada!</h4>
+                  <p>Firma del contrato de adopción responsable y entrega.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-card">
+            <h2 class="goals-title">Metas con mí mascota</h2>
+            <p class="goals-subtitle">Marca las metas alcanzadas y construyan juntos su nueva vida.</p>
+
+            <div class="goals-list">
+              <div class="goal-card" tabindex="0">
+                <input type="checkbox" class="goal-checkbox" aria-label="Marcar primer meta cumplida">
+                <span class="goal-icon">🏠</span>
+                <div class="goal-text">
+                  <h5>Primeros 30 días en casa</h5>
+                  <p>Superada la etapa de adaptación inicial.</p>
+                </div>
+              </div>
+
+              <div class="goal-card" tabindex="0">
+                <input type="checkbox" class="goal-checkbox" aria-label="Marcar visita veterinaria cumplida">
+                <span class="goal-icon">🩺</span>
+                <div class="goal-text">
+                  <h5>Visita inicial al veterinario</h5>
+                  <p>Chequeo general y expediente creado.</p>
+                </div>
+              </div>
+
+              <div class="goal-card" tabindex="0">
+                <input type="checkbox" class="goal-checkbox" aria-label="Marcar vacunas al día">
+                <span class="goal-icon">💉</span>
+                <div class="goal-text">
+                  <h5>Vacunas al día</h5>
+                  <p>Esquema de vacunación completo.</p>
+                </div>
+              </div>
+
+              <div class="goal-card" tabindex="0">
+                <input type="checkbox" class="goal-checkbox" aria-label="Marcar cuidados e higiene">
+                <span class="goal-icon">🧼</span>
+                <div class="goal-text">
+                  <h5>Cuidados e higiene</h5>
+                  <p>Baño, desparasitación y grooming.</p>
+                </div>
+              </div>
+
+              <div class="goal-card" tabindex="0">
+                <input type="checkbox" class="goal-checkbox" aria-label="Marcar adaptación completa">
+                <span class="goal-icon">🐾</span>
+                <div class="goal-text">
+                  <h5>Adaptación completa</h5>
+                  <p>Tu compañero ya se siente en casa.</p>
+                </div>
+              </div>
             </div>
 
-            <button type="submit" id="btnSubmit" class="btn-pink" style="width: 100%; margin-top: 10px;">
-              Enviar actualización
-            </button>
-          </form>
+            <div class="ai-btn-wrapper">
+              <button class="btn-ai">
+                🤖 Pedir orientación a la IA
+              </button>
+            </div>
+          </div>
+
         </div>
+      </section>
 
+      <!-- SECCIÓN INTEGRADA DE ANIMACIÓN CON CANVAS -->
+      <section id="animacion-canvas" class="canvas-section">
+        <h2 class="section-title" style="color: var(--mint-dark);">Animación Interactiva de Mascota</h2>
+        <p style="font-size: 0.9rem; color: #666; margin-bottom: 10px;">
+          Pelota de juguete interactiva rebotando en el área de juegos Pawlly.
+        </p>
+        
+        <div class="canvas-container">
+          <!-- Lienzo de 600×320 píxeles -->
+          <canvas id="miCanvas" width="600" height="320"></canvas>
+          <button id="toggleBtn" class="btn-pink">⏸ Pausar</button>
+        </div>
+      </section>
+
+      <div style="background: white; border-radius: 28px; padding: 25px; text-align: center;">
+        <h3 style="color: var(--mint-dark); margin-bottom: 10px;">Expediente activo: Juno</h3>
+        <p style="font-size: 0.85rem; color: #666; margin-bottom: 15px;">Haz clic sobre la imagen para desplazarla en los ejes X / Y.</p>
+        <img src="Img/Juno.jpeg" alt="Fotografía detallada de Juno" class="interactive-pet-img" id="junoImg" style="border-radius: 16px; max-width: 280px;" tabindex="0" onerror="this.src='https://placehold.co/280x200/e2f4f0/3b7a6e?text=Juno'">
       </div>
-    </section>
 
-  </main>
+      <!-- SECCIÓN SOLICITUD -->
+      <section id="solicitud" class="media-form-section">
+        <div class="media-form-grid">
+          
+          <div style="text-align: center;">
+            <h2 style="color: #555; font-size: 1.4rem; margin-bottom: 15px;">Conoce nuestros albergues:</h2>
+            <div class="reel-wrapper">
+              <iframe 
+                src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1376267787392352&show_text=false&width=320" 
+                scrolling="no" 
+                frameborder="0" 
+                allowfullscreen="true" 
+                allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                title="Video reel de albergues de animales">
+              </iframe>
+            </div>
+          </div>
 
-  <!-- PIE DE PÁGINA -->
-  <footer class="main-footer">
+          <div>
+            <h2 style="color: #555; font-size: 1.4rem; margin-bottom: 15px;">Enviar solicitud / consulta</h2>
+            
+            <form id="adoptionForm" action="https://formsubmit.co/TU_CORREO@gmail.com" method="POST" novalidate>
+              <input type="hidden" name="_subject" value="Nueva consulta de adopción Pawlly">
+              <input type="hidden" name="_template" value="table">
+              <input type="hidden" name="_captcha" value="false">
+
+              <div class="form-group">
+                <label for="nombre">Nombre completo *</label>
+                <input type="text" id="nombre" name="nombre" class="form-control" required aria-required="true">
+              </div>
+
+              <div class="form-group">
+                <label for="email">Correo electrónico *</label>
+                <input type="email" id="email" name="email" class="form-control" required aria-required="true">
+              </div>
+
+              <div class="form-group">
+                <label for="mensaje">Mensaje o comentarios *</label>
+                <textarea id="mensaje" name="mensaje" class="form-control" rows="3" required aria-required="true"></textarea>
+              </div>
+
+              <button type="submit" id="btnSubmit" class="btn-pink" style="width: 100%; margin-top: 10px;">
+                Enviar actualización
+              </button>
+            </form>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+
+  </div>
+
+  <!-- PIE DE PÁGINA (FOOTER) CON ENLACES DE INTERÉS -->
+  <footer class="main-footer" role="contentinfo">
+    <ul class="footer-links">
+      <li><a href="#inicio">Política de Privacidad</a></li>
+      <li><a href="#inicio">Términos y Condiciones</a></li>
+      <li><a href="#solicitud">Contacto</a></li>
+      <li><a href="#inicio">Aviso Legal</a></li>
+    </ul>
     <p>© 2026 PAWLLY. Todos los derechos reservados.</p>
   </footer>
 
@@ -936,6 +1118,7 @@
         document.body.classList.add("loaded");
       }, 200);
 
+      /* Filtrado interactivo */
       const filterButtons = document.querySelectorAll(".filter-box .pill-btn");
       const petCards = document.querySelectorAll(".pet-card");
 
@@ -957,13 +1140,20 @@
         });
       });
 
+      /* Opacidad en cuadro Quienes somos */
       const aboutCard = document.getElementById("aboutCard");
       if (aboutCard) {
         aboutCard.addEventListener("click", () => {
           aboutCard.classList.toggle("dimmed");
         });
+        aboutCard.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            aboutCard.classList.toggle("dimmed");
+          }
+        });
       }
 
+      /* Opacidad en tarjetas de metas */
       const goalCards = document.querySelectorAll(".goal-card");
       goalCards.forEach(card => {
         card.addEventListener("click", (e) => {
@@ -971,12 +1161,21 @@
             card.classList.toggle("dimmed");
           }
         });
+        card.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            card.classList.toggle("dimmed");
+          }
+        });
       });
 
+      /* Desplazamiento de imágenes */
       const borisImg = document.getElementById("borisImg");
       if (borisImg) {
         borisImg.addEventListener("click", () => {
           borisImg.classList.toggle("shifted");
+        });
+        borisImg.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") borisImg.classList.toggle("shifted");
         });
       }
 
@@ -985,8 +1184,12 @@
         junoImg.addEventListener("click", () => {
           junoImg.classList.toggle("shifted");
         });
+        junoImg.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") junoImg.classList.toggle("shifted");
+        });
       }
 
+      /* Validación y feedback de formulario */
       const form = document.getElementById("adoptionForm");
       const submitBtn = document.getElementById("btnSubmit");
       const inputs = form.querySelectorAll(".form-control");
@@ -1017,11 +1220,104 @@
           submitBtn.classList.add("submitting");
 
           setTimeout(() => {
-            alert("¡Solicitud validada con éxito!");
             form.submit();
           }, 750);
         }
       });
+
+      /* ========================================================= */
+      /*   LÓGICA ANIMACIÓN CANVAS (ADAPTADA A LA ESTÉTICA PAWLLY)  */
+      /* ========================================================= */
+      const canvas = document.getElementById('miCanvas');
+      if (canvas) {
+        const ctx = canvas.getContext('2d');
+
+        // Estado de la pelota con colores temáticos de PAWLLY
+        const ball = {
+          x: canvas.width / 2,
+          y: canvas.height / 2,
+          radius: 22,
+          dx: 4.5,
+          dy: 3.5,
+          color: '#ee8bb3' // Rosa pastel característico de Pawlly
+        };
+
+        let animating = true;
+        let animationId;
+
+        // Dibujar huella de patita dentro de la pelota animada
+        function drawPaw(x, y) {
+          ctx.fillStyle = '#ffffff';
+          // Almohadilla central
+          ctx.beginPath();
+          ctx.arc(x, y + 2, 6, 0, Math.PI * 2);
+          ctx.fill();
+          // Dedos
+          ctx.beginPath();
+          ctx.arc(x - 6, y - 5, 2.5, 0, Math.PI * 2);
+          ctx.arc(x - 2, y - 8, 2.5, 0, Math.PI * 2);
+          ctx.arc(x + 2, y - 8, 2.5, 0, Math.PI * 2);
+          ctx.arc(x + 6, y - 5, 2.5, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // Función de dibujo por cada frame
+        function draw() {
+          // Limpiar lienzo
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+          // Sombra suave en el tono verde menta oscuro
+          ctx.shadowColor = 'rgba(59, 122, 110, 0.35)';
+          ctx.shadowBlur = 15;
+          ctx.shadowOffsetX = 3;
+          ctx.shadowOffsetY = 4;
+
+          // Dibujar esfera
+          ctx.beginPath();
+          ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+          ctx.fillStyle = ball.color;
+          ctx.fill();
+
+          // Restaurar sombras para la patita
+          ctx.shadowColor = 'transparent';
+          drawPaw(ball.x, ball.y);
+
+          // Rebotar en los bordes horizontal y vertical
+          if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0) {
+            ball.dx = -ball.dx;
+          }
+          if (ball.y + ball.radius > canvas.height || ball.y - ball.radius < 0) {
+            ball.dy = -ball.dy;
+          }
+
+          // Movimiento de la pelota
+          ball.x += ball.dx;
+          ball.y += ball.dy;
+
+          // Bucle de animación
+          if (animating) {
+            animationId = requestAnimationFrame(draw);
+          }
+        }
+
+        // Control del botón Pausar / Reanudar
+        const toggleBtn = document.getElementById('toggleBtn');
+        if (toggleBtn) {
+          toggleBtn.addEventListener('click', () => {
+            animating = !animating;
+            if (animating) {
+              toggleBtn.textContent = '⏸ Pausar';
+              draw();
+            } else {
+              toggleBtn.textContent = '▶ Reanudar';
+              cancelAnimationFrame(animationId);
+            }
+          });
+        }
+
+        // Iniciar la animación al cargar la página
+        draw();
+      }
 
     });
   </script>
