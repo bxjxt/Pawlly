@@ -3,8 +3,217 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PAWLLY - Estructura Web, Accesibilidad y Canvas Animado</title>
   <style>
+    /* ============================================================
+   1. RESET
+   Neutraliza los estilos por defecto del navegador para partir
+   de una base igual en Chrome, Firefox, Safari y Edge.
+   ============================================================ */
+
+*,                       /* Selecciona TODOS los elementos del documento */
+*::before,               /* Y también los pseudo-elementos ::before… */
+*::after {               /* …y ::after, para que respeten el box-sizing */
+  margin: 0;             /* Quita el margen por defecto (body, h1, p, ul… traen uno) */
+  padding: 0;            /* Quita el padding por defecto (ul, ol, blockquote… traen uno) */
+  box-sizing: border-box;/* El ancho declarado INCLUYE padding + border (evita cálculos raros) */
+}
+
+
+html {                              /* El elemento raíz del documento */
+  -webkit-text-size-adjust: 100%;   /* Evita que iOS agrande el texto al girar el móvil a horizontal */
+  scroll-behavior: smooth;          /* Al pulsar un enlace con #ancla, el scroll es suave en vez de salto seco */
+}
+
+
+body {                                       /* El cuerpo visible de la página */
+  min-height: 100vh;                         /* El body ocupa al menos el 100% del alto de la ventana (vh = viewport height) */
+  line-height: 1.5;                          /* Interlineado base: 1.5× el tamaño de fuente, legible por defecto */
+  font-family: system-ui, -apple-system,      /* Cadena de fuentes del sistema: usa la nativa del SO (más rápida) */
+               "Segoe UI", Roboto, sans-serif; /* Fallbacks por si el sistema no expone system-ui */
+  -webkit-font-smoothing: antialiased;       /* Render más nítido del texto en macOS/iOS (no afecta Windows) */
+}
+
+
+img,                     /* Selecciona imágenes… */
+picture,                 /* …elementos <picture> responsive… */
+video,                   /* …vídeos… */
+canvas,                  /* …lienzos de dibujo… */
+svg {                    /* …y gráficos vectoriales inline */
+  display: block;        /* Los convierte en bloque: elimina el hueco fantasma que dejan como inline (baseline gap) */
+  max-width: 100%;       /* Nunca se desbordan del contenedor: clave del responsive */
+  height: auto;          /* El alto se recalcula solo → mantiene la proporción original */
+}
+
+
+input,                   /* Campos de formulario de una línea… */
+button,                  /* …botones… */
+textarea,                /* …áreas de texto… */
+select {                 /* …y desplegables */
+  font: inherit;         /* Heredan la tipografía del padre (por defecto los inputs usan Arial 13px del navegador) */
+  color: inherit;        /* Heredan el color de texto del padre (por defecto suelen ser negros fijos) */
+}
+
+
+p,                       /* Selecciona párrafos… */
+h1, h2, h3, h4, h5, h6 { /* …y todos los niveles de encabezado */
+  overflow-wrap: break-word;  /* Si una palabra es más ancha que el contenedor, la parte en vez de desbordar el layout */
+}
+
+
+a {                              /* Todos los enlaces */
+  color: inherit;                /* Heredan el color del texto padre (en vez del azul por defecto) */
+  text-decoration: none;         /* Sin subrayado por defecto (lo añadimos donde queramos con :hover) */
+}
+
+
+ul {                       /* Listas no ordenadas */
+  list-style: none;        /* Sin viñetas (los menús las quitan casi siempre) */
+}
+
+ 
+
+/* ============================================================
+   2. TIPOGRAFÍA FLUIDA
+   Con clamp() el tamaño se adapta al ancho del viewport sin
+   necesidad de escribir media queries para cada breakpoint.
+   Fórmula: clamp(MÍNIMO, PREFERIDO, MÁXIMO)
+   ============================================================ */
+
+h1 {                                             /* Encabezado principal */
+  font-size: clamp(1.75rem, 5vw, 3rem);          /* Mín 1.75rem (28px) · preferido 5vw · máx 3rem (48px) */
+  line-height: 1.1;                              /* Interlineado más apretado: los títulos grandes necesitan menos aire */
+}
+
+h2 {                                             /* Encabezado secundario */
+  font-size: clamp(1.4rem, 3.5vw, 2.25rem);      /* Crece entre 22px y 36px según ancho de pantalla */
+  line-height: 1.2;                              /* Ligeramente más apretado que el texto normal (1.5) */
+}
+
+h3 {                                             /* Encabezado de tercer nivel */
+  font-size: clamp(1.15rem, 2.5vw, 1.5rem);      /* Entre 18px y 24px */
+}
+
+p  {                                             /* Párrafos de texto */
+  font-size: clamp(0.95rem, 1.5vw, 1.05rem);     /* Entre 15px y 17px: nunca demasiado pequeño ni demasiado grande */
+}
+
+ 
+
+/* ============================================================
+   3. CONTENEDOR
+   Centra el contenido horizontalmente y limita su ancho máximo.
+   ============================================================ */
+
+.container {
+  width: min(100% - 2rem, 1200px);  /* "min" toma el menor de los dos: 100% menos 2rem de padding lateral, o 1200px */
+  margin-inline: auto;              /* Centra horizontalmente (equivalente moderno a margin: 0 auto) */
+}
+
+/* Alternativa clásica equivalente (por si prefieres compatibilidad con navegadores viejos) */
+/*
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+*/
+
+ 
+
+/* ============================================================
+   4. UTILIDADES RESPONSIVE SIN MEDIA QUERIES
+   Patrones que se adaptan solos según el ancho disponible.
+   ============================================================ */
+
+.grid-auto {
+  display: grid;                                                  /* Activa Grid */
+  grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr)); /* Columnas de mínimo 250px que se reacomodan solas */
+  gap: 1rem;                                                      /* Separación uniforme entre celdas */
+}
+/* Desglose de la línea anterior:
+   - repeat(auto-fit, …)  → mete tantas columnas como quepan
+   - minmax(min(250px, 100%), 1fr)
+        · min(250px, 100%)  → tamaño mínimo: 250px, pero si la pantalla es < 250px usa el 100% (evita overflow)
+        · 1fr               → tamaño máximo: reparte el espacio libre en fracciones iguales
+*/
+
+
+.flex-auto {
+  display: flex;          /* Activa Flexbox */
+  flex-wrap: wrap;        /* Permite que los hijos salten a la siguiente línea si no caben */
+  gap: 1rem;              /* Separación entre hijos, sin márgenes manuales */
+}
+
+.flex-auto > * {          /* Cualquier hijo directo de .flex-auto */
+  flex: 1 1 240px;        /* grow 1 · shrink 1 · basis 240px → mínimo 240px, crece para repartir el espacio */
+}
+
+ 
+
+/* ============================================================
+   5. BREAKPOINTS (mobile first)
+   El CSS base de arriba ya funciona en móvil. Estas media queries
+   AÑADEN estilos cuando la pantalla es IGUAL O MAYOR al valor.
+   ============================================================ */
+
+@media (min-width: 640px)  {  /* SM · móviles grandes y tablets verticales (≥ 640px) */
+  /* Aquí irían los estilos para pantallas de 640px en adelante */
+}
+
+@media (min-width: 768px)  {  /* MD · tablets horizontales (≥ 768px) */
+  /* Estilos para tablet en horizontal */
+}
+
+@media (min-width: 1024px) {  /* LG · desktop estándar (≥ 1024px) */
+  /* Estilos para escritorio */
+}
+
+@media (min-width: 1280px) {  /* XL · desktop grande (≥ 1280px) */
+  /* Estilos para monitores anchos */
+}
+
+@media (min-width: 1536px) {  /* 2XL · monitores muy anchos (≥ 1536px) */
+  /* Estilos para pantallas 2K o superiores */
+}
+
+ 
+
+/* ============================================================
+   6. PREFERENCIAS DEL USUARIO
+   Estas media queries NO son de tamaño sino de accesibilidad:
+   respetan la configuración del sistema operativo.
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {           /* Si el usuario activó "reducir movimiento" en su SO */
+  *,                                                /* Todos los elementos… */
+  *::before,                                        /* …y sus pseudo-elementos… */
+  *::after {                                        /* …también */
+    animation-duration: 0.01ms !important;          /* Anula la duración de las animaciones (casi instantáneas) */
+    transition-duration: 0.01ms !important;         /* Anula las transiciones */
+    scroll-behavior: auto !important;               /* Desactiva el scroll suave (puede marear a algunas personas) */
+  }
+}
+/* !important es necesario aquí porque sobreescribimos reglas específicas */
+
+
+@media (prefers-color-scheme: dark) {               /* Si el usuario tiene el modo oscuro del sistema activado */
+  :root {                                           /* Elemento raíz: afecta a las variables globales */
+    /* --bg: #16161a; */                             /* Descomenta y define tus variables del tema oscuro */
+    /* --text: #faf7f2; */
+  }
+}
+
+
+@media (hover: hover) and (pointer: fine) {          /* Solo dispositivos con ratón/trackpad (no táctiles) */
+  /* Aquí van los :hover… así no se "pega" el hover en móviles al tocar */
+  /* Ejemplo: */
+  /* .btn:hover { transform: translateY(-2px); } */
+}
+
+
+
     :root {
       --mint-bg: #e2f4f0;
       --mint-card: #d1efe7;
